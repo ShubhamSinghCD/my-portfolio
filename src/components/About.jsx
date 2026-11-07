@@ -22,24 +22,25 @@ export default function About({ isDark }) {
             </div>
             <h2 className={`font-display font-extrabold leading-tight mb-8 ${headTxt}`}
                 style={{ fontSize:'clamp(2.4rem,5vw,3.5rem)' }}>
-              Building the<br /><span className="grad-text">digital web</span><br />since 2020.
+              Backend that<br /><span className="grad-text">scales</span> &amp;<br />stays up.
             </h2>
             <p className={`font-body leading-relaxed mb-6 ${muted}`}>
-              I'm a dedicated full-stack developer from Kandivali East, Mumbai with a B.Sc. in
-              Information Technology. I specialise in turning complex ideas into clean,
-              performant web experiences.
+              Backend developer from Kandivali East, Mumbai with 4+ years of experience building
+              and maintaining scalable web applications and REST APIs across enterprise, fintech
+              and digital marketing domains.
             </p>
             <p className={`font-body leading-relaxed mb-8 ${muted}`}>
-              From managing film industry websites to building enterprise-grade applications
-              deployed at the{' '}
-              <strong className={headTxt}>National Stock Exchange of India</strong>, I bring
-              both breadth and depth to every project.
+              Currently deployed at the{' '}
+              <strong className={headTxt}>National Stock Exchange of India (NSE)</strong>, managing
+              critical enterprise platforms. Strong in backend architecture, database design and
+              PHP/Laravel + MySQL — now applying that to Python with FastAPI, including
+              AI/ML-integrated applications.
             </p>
             <div className="flex flex-wrap gap-3">
               {[
                 ['Location','Mumbai, IN'],
-                ['Education','BSc IT · 2020'],
-                ['Status','● Available'],
+                ['Education','B.Sc. IT · 2020'],
+                ['Status','● Open to work'],
               ].map(([lbl, val]) => (
                 <div key={lbl} className={`glow-border rounded-xl px-5 py-4 text-center ${isDark?'bg-ink':'bg-white'}`}>
                   <p className={`font-body text-xs uppercase tracking-widest ${muted}`}>{lbl}</p>
@@ -60,14 +61,14 @@ export default function About({ isDark }) {
               {/* Floating card 1 */}
               <div className={`absolute top-6 -left-2 glow-border rounded-2xl p-4 animate-float ${isDark?'bg-ink':'bg-white'}`}>
                 <p className={`font-body text-xs ${muted}`}>Current Role</p>
-                <p className={`font-display font-bold text-sm mt-1 ${headTxt}`}>Software Developer @ HSS</p>
-                <p className={`font-body text-xs mt-1 ${accentTxt}`}>NSE of India · Jan 2025</p>
+                <p className={`font-display font-bold text-sm mt-1 ${headTxt}`}>Software Developer</p>
+                <p className={`font-body text-xs mt-1 ${accentTxt}`}>Hridyaam Soft · NSE · Jan 2025</p>
               </div>
               {/* Floating card 2 */}
               <div className={`absolute bottom-6 -right-2 glow-border rounded-2xl p-4 animate-float-delay ${isDark?'bg-ink':'bg-white'}`}>
                 <p className={`font-body text-xs ${muted}`}>Core Stack</p>
                 <div className="flex gap-2 mt-2 flex-wrap">
-                  {['Laravel','PHP','React'].map(s=>(
+                  {['Python','FastAPI','Laravel'].map(s=>(
                     <span key={s} className="skill-badge" style={{fontSize:'0.7rem',padding:'2px 10px'}}>{s}</span>
                   ))}
                 </div>

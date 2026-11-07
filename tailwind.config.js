@@ -7,6 +7,7 @@ export default {
       fontFamily: {
         display: ['Syne', 'sans-serif'],
         body: ['DM Sans', 'sans-serif'],
+        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Consolas', 'monospace'],
       },
       colors: {
         ink: '#0a0a0f',

@@ -41,7 +41,7 @@ export default function Hero({ isDark }) {
       <div className="relative z-10 max-w-7xl mx-auto px-6 pt-32 pb-20 w-full">
         <div className="max-w-3xl">
           <p ref={refs.tag} className={`font-body text-sm uppercase tracking-widest mb-6 opacity-0 ${accentColor}`}>
-            ✦ Full Stack Web Developer · Mumbai, India
+            ✦ Backend Developer · Python &amp; PHP · Mumbai, India
           </p>
           <h1 className="font-display font-extrabold leading-none mb-6"
               style={{ fontSize: 'clamp(52px,9vw,110px)' }}>
@@ -49,12 +49,12 @@ export default function Hero({ isDark }) {
             <span ref={refs.n2} className="block grad-text opacity-0">Singh.</span>
           </h1>
           <p ref={refs.desc} className={`font-body text-lg max-w-xl leading-relaxed mb-10 opacity-0 ${mutedColor}`}>
-            Crafting performant, scalable web applications with{' '}
-            <strong className={textColor}>PHP · Laravel · React</strong>.{' '}
-            4+ years shipping production code from film platforms to enterprise NSE systems.
+            Building scalable web applications and REST APIs with{' '}
+            <strong className={textColor}>Python · FastAPI · PHP · Laravel</strong>.{' '}
+            4+ years across enterprise, fintech and digital marketing — currently deployed at the National Stock Exchange of India.
           </p>
           <div ref={refs.cta} className="flex flex-wrap gap-4 opacity-0">
-            <a href="#experience" className="btn-primary px-8 py-4 rounded-full text-sm">
+            <a href="#projects" className="btn-primary px-8 py-4 rounded-full text-sm">
               <span>View My Work ↓</span>
             </a>
             <a href="#contact"
@@ -63,7 +63,7 @@ export default function Hero({ isDark }) {
             </a>
           </div>
           <div ref={refs.stats} className="flex gap-10 mt-16 opacity-0">
-            {[['4+','Years Exp'],['8+','Projects Built'],['3','Companies']].map(([num,label]) => (
+            {[['4+','Years Exp'],['13+','Projects Built'],['3','Companies']].map(([num,label]) => (
               <div key={label}>
                 <p className="font-display font-extrabold text-4xl grad-text">{num}</p>
                 <p className={`font-body text-xs uppercase tracking-wider mt-1 ${mutedColor}`}>{label}</p>

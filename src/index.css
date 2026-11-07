@@ -339,34 +339,41 @@ body.dark .exp-card:hover { background: rgba(18,18,26,1); border-color: rgba(0,2
 body.light .project-card { background: #eceae3; }
 body.dark  .project-card { background: #0a0a0f; }
 
-/* input */
-input, textarea {
-  font-family: 'DM Sans', sans-serif;
-  outline: none;
-  width: 100%;
-  border-radius: 12px;
-  padding: 14px 18px;
-  font-size: 0.9rem;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+/* ── Keyframes (defined here so they always ship — Tailwind only emits
+      keyframes for animate-* utilities, but these are used via inline style) ── */
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
-body.dark input, body.dark textarea {
-  background: rgba(28,28,40,0.8);
-  border: 1px solid rgba(255,255,255,0.08);
-  color: #e8e8f0;
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 8px rgba(0,229,255,0.4); }
+  50%      { box-shadow: 0 0 24px rgba(0,229,255,0.9), 0 0 48px rgba(0,229,255,0.3); }
 }
-body.dark input::placeholder, body.dark textarea::placeholder { color: #6b6b80; }
-body.dark input:focus, body.dark textarea:focus {
-  border-color: rgba(0,229,255,0.4);
-  box-shadow: 0 0 18px rgba(0,229,255,0.1);
+@keyframes caretBlink {
+  0%, 49%   { opacity: 1; }
+  50%, 100% { opacity: 0; }
 }
-body.light input, body.light textarea {
-  background: #fff;
-  border: 1px solid rgba(0,0,0,0.1);
-  color: #1a1a2e;
+
+/* ── Contact terminal card ──────────────────────────────────── */
+.term-shadow { box-shadow: 0 24px 60px rgba(0,0,0,0.35), 0 0 40px rgba(0,229,255,0.08); }
+.term-caret {
+  display: inline-block;
+  width: 8px; height: 15px;
+  vertical-align: -2px;
+  background: #00e5ff;
+  animation: caretBlink 1s steps(1) infinite;
 }
-body.light input::placeholder, body.light textarea::placeholder { color: #9a9aaa; }
-body.light input:focus, body.light textarea:focus {
-  border-color: rgba(0,112,243,0.4);
-  box-shadow: 0 0 18px rgba(0,112,243,0.1);
+.term-row { transition: background 0.2s ease; }
+.term-row:hover { background: rgba(0,229,255,0.08); }
+.term-row:hover .term-val { text-decoration: underline; }
+
+/* ── Touch / no-hover devices: use the normal cursor ────────── */
+@media (hover: none), (pointer: coarse) {
+  body.dark, body.light { cursor: auto; }
+  #cursor, #cursor-ring { display: none; }
 }
-textarea { resize: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .term-caret { animation: none; }
+}

@@ -1,201 +1,161 @@
-import { useRef, useState } from 'react'
-import $ from 'jquery'
+import { useState } from 'react'
 
-function FieldError({ msg }) {
-  if (!msg) return null
-  return (
-    <p className="mt-1 text-xs text-red-400 flex items-center gap-1">
-      <span>⚠</span> {msg}
-    </p>
-  )
-}
+const EMAIL  = 'shubhamsingh4954@gmail.com'
+const PHONE  = '+91 7738684954'
+const WA_URL = `https://wa.me/917738684954?text=${encodeURIComponent(
+  'Hi Shubham! I came across your portfolio and would love to discuss a project with you.'
+)}`
 
-function Spinner() {
-  return (
-    <svg className="animate-spin w-4 h-4 inline-block mr-2" viewBox="0 0 24 24" fill="none">
-      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
-    </svg>
-  )
-}
-
-const INIT_FIELDS = { name: '', email: '', subject: '', message: '' }
-const INIT_ERRORS = { name: '', email: '', subject: '', message: '' }
+// key / value rows rendered inside the terminal card
+const CHANNELS = [
+  { key: 'email',    val: EMAIL,                  href: `mailto:${EMAIL}` },
+  { key: 'phone',    val: PHONE,                  href: 'tel:+917738684954' },
+  { key: 'whatsapp', val: 'wa.me/917738684954',   href: WA_URL, external: true },
+  { key: 'github',   val: 'github.com/ShubhamSinghCD', href: 'https://github.com/ShubhamSinghCD', external: true },
+  { key: 'website',  val: 'coredev.in',           href: 'https://coredev.in', external: true },
+  { key: 'location', val: 'Kandivali East, Mumbai, IN', href: null },
+]
 
 export default function Contact({ isDark }) {
-  const [fields, setFields] = useState(INIT_FIELDS)
-  const [errors, setErrors] = useState(INIT_ERRORS)
-  const [status, setStatus] = useState('idle')
-  const [apiMsg, setApiMsg] = useState('')
-  const formRef = useRef(null)
+  const [copied, setCopied] = useState(false)
 
-  const bg     = isDark ? 'bg-ink-2'   : 'bg-day-bg2'
+  const bg     = isDark ? 'bg-ink-2'    : 'bg-day-bg2'
   const muted  = isDark ? 'text-muted'  : 'text-gray-500'
   const head   = isDark ? 'text-light'  : 'text-day-text'
   const accent = isDark ? 'text-accent' : 'text-blue-600'
-  const iconBg = isDark ? 'bg-ink'     : 'bg-white'
+  const border = isDark ? 'border-white/10' : 'border-black/10'
 
-  const validate = () => {
-    const e = { ...INIT_ERRORS }
-    let ok = true
-    if (!fields.name.trim())        { e.name    = 'Name is required.';             ok = false }
-    else if (fields.name.length>120){ e.name    = 'Max 120 characters.';           ok = false }
-    if (!fields.email.trim())       { e.email   = 'Email is required.';            ok = false }
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.email))
-                                    { e.email   = 'Enter a valid email.';          ok = false }
-    if (!fields.subject.trim())     { e.subject = 'Subject is required.';          ok = false }
-    if (!fields.message.trim())     { e.message = 'Message is required.';          ok = false }
-    else if (fields.message.trim().length < 10)
-                                    { e.message = 'At least 10 characters.';       ok = false }
-    setErrors(e)
-    return ok
-  }
-
-  const handleSubmit = e => {
-    e.preventDefault()
-    if (!validate()) return
-    setStatus('loading')
-    setApiMsg('')
-
-    $.ajax({
-      url:         '/api/contact',
-      method:      'POST',
-      contentType: 'application/json',
-      data:        JSON.stringify(fields),
-      success(res) {
-        if (res.success) {
-          setStatus('success')
-          setApiMsg(res.message)
-          setFields(INIT_FIELDS)
-          setErrors(INIT_ERRORS)
-          setTimeout(() => { setStatus('idle'); setApiMsg('') }, 5000)
-        } else {
-          setStatus('error')
-          setApiMsg((res.errors || ['Something went wrong.']).join(' '))
-        }
-      },
-      error(xhr) {
-        const res = xhr.responseJSON
-        setStatus('error')
-        setApiMsg(res?.errors?.join(' ') || 'Server error. Please try again later.')
-      },
-    })
-  }
-
-  const onChange = e => {
-    const { name, value } = e.target
-    setFields(f => ({ ...f, [name]: value }))
-    if (errors[name]) setErrors(er => ({ ...er, [name]: '' }))
-  }
-
-  const inputCls = hasErr =>
-    `w-full rounded-xl px-5 py-4 text-sm outline-none transition-all duration-300 ${hasErr ? 'border-red-400/60 bg-red-500/5' : ''}`.trim()
-
-  const BtnContent = () => {
-    if (status === 'loading') return <><Spinner /><span>Sending…</span></>
-    if (status === 'success') return <span>✓ Message Sent!</span>
-    return <span>Send Message →</span>
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(EMAIL)
+    } catch {
+      // clipboard API unavailable (http / old browser) → legacy fallback
+      const ta = document.createElement('textarea')
+      ta.value = EMAIL
+      ta.style.position = 'fixed'
+      ta.style.opacity = '0'
+      document.body.appendChild(ta)
+      ta.select()
+      try { document.execCommand('copy') } catch { /* ignore */ }
+      document.body.removeChild(ta)
+    }
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
   }
 
   return (
     <section id="contact" className={`py-32 relative overflow-hidden ${bg}`}>
       <div className="absolute inset-0 pointer-events-none"
-           style={{ background:'radial-gradient(ellipse at center,#00e5ff,transparent 70%)', opacity:isDark?0.04:0.02 }} />
+           style={{ background: 'radial-gradient(ellipse at 20% 30%,#00e5ff,transparent 60%)', opacity: isDark ? 0.05 : 0.03 }} />
+      <div className="absolute inset-0 pointer-events-none"
+           style={{ background: 'radial-gradient(ellipse at 90% 90%,#7b61ff,transparent 55%)', opacity: isDark ? 0.07 : 0.04 }} />
 
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="grid lg:grid-cols-2 gap-20">
+      <div className="max-w-7xl mx-auto px-6 relative">
+        <div className="grid lg:grid-cols-5 gap-14 items-center">
 
-          {/* Left info */}
-          <div data-aos="fade-right">
+          {/* ── Left: pitch + actions ───────────────────────── */}
+          <div className="lg:col-span-3" data-aos="fade-right">
             <div className="section-line">
               <p className={`font-body text-sm uppercase tracking-widest mb-3 ${accent}`}>— Let's Talk</p>
             </div>
-            <h2 className={`font-display font-extrabold leading-tight mb-8 ${head}`}
-                style={{ fontSize:'clamp(2.4rem,5vw,3.5rem)' }}>
-              Got a project<br />in <span className="grad-text">mind?</span>
+
+            <h2 className={`font-display font-extrabold leading-[1.05] mb-6 ${head}`}
+                style={{ fontSize: 'clamp(2.6rem,6vw,4.6rem)' }}>
+              Let's build something <span className="grad-text">reliable.</span>
             </h2>
-            <p className={`font-body leading-relaxed mb-10 ${muted}`}>
-              Always open to discussing new projects, creative ideas, or opportunities.
-              Let's build something great together!
+
+            <p className={`font-body text-lg leading-relaxed max-w-xl mb-8 ${muted}`}>
+              Backend roles, API projects or a Python / Laravel system that needs a steady pair of hands —
+              drop me a line and I'll get back to you.
             </p>
-            <div className="space-y-5">
-              {[
-                { icon:'📧', label:'Email',    val:'shubhamsingh4954@gmail.com', href:'mailto:shubhamsingh4954@gmail.com' },
-                { icon:'📱', label:'Phone',    val:'+91 7738684954',             href:'tel:+917738684954' },
-                { icon:'📍', label:'Location', val:'Kandivali East, Mumbai',     href:null },
-              ].map(({ icon, label, val, href }) => (
-                <div key={label} className="flex items-center gap-4">
-                  <div className={`w-12 h-12 rounded-xl glow-border flex items-center justify-center flex-shrink-0 text-lg ${iconBg}`}>
-                    {icon}
-                  </div>
-                  <div>
-                    <p className={`font-body text-xs uppercase tracking-wider ${muted}`}>{label}</p>
-                    {href
-                      ? <a href={href} className={`font-body text-sm hover:underline ${head}`}>{val}</a>
-                      : <p className={`font-body text-sm ${head}`}>{val}</p>}
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="mt-10 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse inline-block" />
-              <span className={`font-body text-xs ${muted}`}>
-                Messages stored in MySQL · <code className="opacity-60">portfolio.contacts</code>
+
+            <div className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 mb-10 ${border}`}>
+              <span className="relative flex w-2.5 h-2.5">
+                <span className="absolute inline-flex w-full h-full rounded-full bg-green-400 opacity-60 animate-ping" />
+                <span className="relative inline-flex w-2.5 h-2.5 rounded-full bg-green-400" />
               </span>
+              <span className={`font-body text-xs uppercase tracking-widest ${head}`}>Open to opportunities</span>
+            </div>
+
+            {/* Big email line */}
+            <div className={`flex flex-wrap items-center gap-3 mb-8`}>
+              <a href={`mailto:${EMAIL}`}
+                 className={`font-display font-bold break-all hover:underline ${head}`}
+                 style={{ fontSize: 'clamp(1.15rem,2.6vw,1.8rem)' }}>
+                {EMAIL}
+              </a>
+              <button
+                type="button"
+                onClick={copyEmail}
+                className={`font-body text-xs uppercase tracking-wider rounded-full border px-4 py-2 transition-all duration-300 hover:border-accent ${border} ${copied ? 'text-green-400 border-green-400/50' : head}`}
+                aria-live="polite"
+              >
+                {copied ? '✓ Copied' : 'Copy'}
+              </button>
+            </div>
+
+            <div className="flex flex-wrap gap-4">
+              <a href={`mailto:${EMAIL}?subject=${encodeURIComponent('Opportunity — via coredev.in')}`}
+                 className="btn-primary px-8 py-4 rounded-full text-sm">
+                <span>Email Me →</span>
+              </a>
+              <a href={WA_URL} target="_blank" rel="noreferrer"
+                 className={`px-8 py-4 rounded-full text-sm font-display font-semibold border transition-all duration-300 hover:border-[#25d366] hover:text-[#25d366] ${border} ${head}`}>
+                WhatsApp
+              </a>
+              <a href="/resume/Shubham_Singh_Resume.docx" download
+                 className={`px-8 py-4 rounded-full text-sm font-display font-semibold border transition-all duration-300 hover:border-accent ${border} ${head}`}>
+                Résumé ↓
+              </a>
             </div>
           </div>
 
-          {/* Right form */}
-          <div data-aos="fade-left" data-aos-delay="200">
-            {apiMsg && (
-              <div className={`mb-6 px-5 py-4 rounded-xl text-sm font-body flex items-start gap-3 ${
-                status === 'success'
-                  ? 'bg-green-500/10 border border-green-500/30 text-green-400'
-                  : 'bg-red-500/10 border border-red-500/30 text-red-400'
-              }`}>
-                <span className="flex-shrink-0">{status === 'success' ? '✅' : '❌'}</span>
-                <span>{apiMsg}</span>
+          {/* ── Right: terminal card ────────────────────────── */}
+          <div className="lg:col-span-2" data-aos="fade-left" data-aos-delay="150">
+            <div className="rounded-2xl overflow-hidden term-shadow"
+                 style={{ background: '#0b0d14', border: '1px solid rgba(0,229,255,0.2)' }}>
+              {/* title bar */}
+              <div className="flex items-center gap-2 px-4 py-3"
+                   style={{ background: '#11141d', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                <span className="w-3 h-3 rounded-full" style={{ background: '#ff5f57' }} />
+                <span className="w-3 h-3 rounded-full" style={{ background: '#febc2e' }} />
+                <span className="w-3 h-3 rounded-full" style={{ background: '#28c840' }} />
+                <span className="ml-3 font-mono text-xs" style={{ color: '#6b6b80' }}>~/coredev — contact</span>
               </div>
-            )}
 
-            <form ref={formRef} onSubmit={handleSubmit} noValidate className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <input type="text" name="name" placeholder="Your Name"
-                         value={fields.name} onChange={onChange} className={inputCls(!!errors.name)} />
-                  <FieldError msg={errors.name} />
+              {/* body */}
+              <div className="p-5 sm:p-6 font-mono text-[13px] leading-7" style={{ color: '#e8e8f0' }}>
+                <p><span style={{ color: '#28c840' }}>➜</span> <span style={{ color: '#00e5ff' }}>~</span> whoami</p>
+                <p className="mb-3" style={{ color: '#9aa0b4' }}>shubham-singh · backend developer</p>
+
+                <p><span style={{ color: '#28c840' }}>➜</span> <span style={{ color: '#00e5ff' }}>~</span> cat contact.json</p>
+                <div className="mt-1 mb-3">
+                  <span style={{ color: '#7b61ff' }}>{'{'}</span>
+                  {CHANNELS.map(({ key, val, href, external }) => {
+                    const line = (
+                      <>
+                        <span style={{ color: '#00e5ff' }}>"{key}"</span>
+                        <span style={{ color: '#6b6b80' }}>: </span>
+                        <span className="term-val break-all" style={{ color: '#ffd479' }}>"{val}"</span>
+                        <span style={{ color: '#6b6b80' }}>,</span>
+                      </>
+                    )
+                    return href ? (
+                      <a key={key} href={href}
+                         {...(external ? { target: '_blank', rel: 'noreferrer' } : {})}
+                         className="term-row block pl-4 -mx-2 px-2 rounded-md">
+                        {line}
+                      </a>
+                    ) : (
+                      <div key={key} className="pl-4 -mx-2 px-2">{line}</div>
+                    )
+                  })}
+                  <span style={{ color: '#7b61ff' }}>{'}'}</span>
                 </div>
-                <div>
-                  <input type="email" name="email" placeholder="Email Address"
-                         value={fields.email} onChange={onChange} className={inputCls(!!errors.email)} />
-                  <FieldError msg={errors.email} />
-                </div>
+
+                <p><span style={{ color: '#28c840' }}>➜</span> <span style={{ color: '#00e5ff' }}>~</span> <span className="term-caret" /></p>
               </div>
-
-              <div>
-                <input type="text" name="subject" placeholder="Subject"
-                       value={fields.subject} onChange={onChange} className={inputCls(!!errors.subject)} />
-                <FieldError msg={errors.subject} />
-              </div>
-
-              <div>
-                <textarea name="message" rows={6} placeholder="Tell me about your project…"
-                          value={fields.message} onChange={onChange} className={inputCls(!!errors.message)} />
-                <FieldError msg={errors.message} />
-              </div>
-
-              <button
-                type="submit"
-                disabled={status === 'loading' || status === 'success'}
-                className={`btn-primary w-full py-4 rounded-xl text-sm font-display font-bold uppercase tracking-wider flex items-center justify-center gap-1 disabled:opacity-70 disabled:pointer-events-none ${status === 'success' ? 'opacity-80' : ''}`}
-              >
-                <BtnContent />
-              </button>
-
-              <p className={`text-center font-body text-xs ${muted}`}>
-                jQuery Ajax → Express API → MySQL
-              </p>
-            </form>
+            </div>
           </div>
 
         </div>
