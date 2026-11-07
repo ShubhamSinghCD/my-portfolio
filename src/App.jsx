@@ -12,6 +12,7 @@ import Skills            from './components/Skills'
 import Projects          from './components/Projects'
 import Marquee           from './components/Marquee'
 import Experience        from './components/Experience'
+import Education         from './components/Education'
 import Contact           from './components/Contact'
 import Footer            from './components/Footer'
 import WhatsAppButton    from './components/WhatsAppButton'
@@ -42,6 +43,7 @@ export default function App() {
         <Projects  isDark={isDark} />
         <Marquee   isDark={isDark} />
         <Experience isDark={isDark} />
+        <Education isDark={isDark} />
         <Contact   isDark={isDark} />
       </main>
 

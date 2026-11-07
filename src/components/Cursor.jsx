@@ -36,14 +36,17 @@ export default function Cursor() {
       if (dotRef.current)  dotRef.current.style.transform  = 'translate(-50%,-50%) scale(1)'
       if (ringRef.current) ringRef.current.style.transform = 'translate(-50%,-50%) scale(1)'
     }
-    document.addEventListener('mouseenter', grow, true)
-    document.querySelectorAll('a,button,.skill-badge,.exp-card,.project-card').forEach(el => {
-      el.addEventListener('mouseenter', grow)
-      el.addEventListener('mouseleave', shrink)
-    })
+    // Event delegation: works for elements rendered after mount too
+    const SEL = 'a,button,.skill-badge,.exp-card,.project-card'
+    const onOver = e => { if (e.target.closest && e.target.closest(SEL)) grow() }
+    const onOut  = e => { if (e.target.closest && e.target.closest(SEL)) shrink() }
+    document.addEventListener('mouseover', onOver)
+    document.addEventListener('mouseout',  onOut)
 
     return () => {
       window.removeEventListener('mousemove', onMove)
+      document.removeEventListener('mouseover', onOver)
+      document.removeEventListener('mouseout',  onOut)
       cancelAnimationFrame(raf.current)
     }
   }, [])

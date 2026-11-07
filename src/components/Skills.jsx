@@ -1,14 +1,14 @@
 const SKILLS = [
-  { icon:'⚡', title:'Backend',          tags:['PHP','Laravel','MySQL','RESTful API','Ajax','Core PHP'] },
-  { icon:'🎨', title:'Frontend',         tags:['React.js','Tailwind CSS','Alpine.js','jQuery','Bootstrap','HTML/CSS'] },
-  { icon:'🛠',  title:'Infrastructure',   tags:['Linux','Apache','Nginx','Python','Git'] },
-  { icon:'📈', title:'Marketing & SEO',  tags:['On-Page SEO','Off-Page SEO','Site Audits','CPaaS','Digital Marketing'] },
+  { icon:'🐍', title:'Languages',       tags:['Python','PHP','JavaScript (ES6+)','SQL','HTML5','CSS3'] },
+  { icon:'⚡', title:'Frameworks',      tags:['FastAPI','Laravel','React.js','Node.js','Express.js','Alpine.js','Tailwind CSS'] },
+  { icon:'🗄',  title:'Databases',       tags:['MySQL','Database Design','Query Optimization'] },
+  { icon:'🛠',  title:'Tools & Infra',   tags:['Git','GitHub','Linux','Apache','Nginx','REST APIs','Postman','Composer','npm'] },
+  { icon:'📈', title:'Other',           tags:['SEO (On-page & Off-page)','Agile/Scrum','Cross-functional Collaboration'] },
 ]
 
 export default function Skills({ isDark }) {
   const bg     = isDark ? 'bg-ink'  : 'bg-day-bg'
   const card   = isDark ? 'bg-ink-2': 'bg-white'
-  const muted  = isDark ? 'text-muted' : 'text-gray-500'
   const head   = isDark ? 'text-light' : 'text-day-text'
   const accent = isDark ? 'text-accent' : 'text-blue-600'
 
@@ -24,7 +24,7 @@ export default function Skills({ isDark }) {
           </h2>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {SKILLS.map((s, i) => (
             <div key={s.title}
                  className={`glow-border rounded-2xl p-8 ${card}`}
@@ -39,15 +39,21 @@ export default function Skills({ isDark }) {
               </div>
             </div>
           ))}
-        </div>
 
-        {/* Languages */}
-        <div className={`mt-8 glow-border rounded-2xl p-8 ${card}`} data-aos="fade-up">
-          <p className={`font-body text-sm uppercase tracking-widest mb-4 ${muted}`}>Languages Spoken</p>
-          <div className="flex flex-wrap gap-3">
-            {['Hindi','Marathi','English'].map(l=><span key={l} className="skill-badge">{l}</span>)}
+          {/* Spoken languages */}
+          <div className={`glow-border rounded-2xl p-8 ${card}`}
+               data-aos="fade-up" data-aos-delay={SKILLS.length * 80}>
+            <div className="w-12 h-12 rounded-xl mb-6 flex items-center justify-center"
+                 style={{ background:'linear-gradient(135deg,rgba(0,229,255,0.12),rgba(123,97,255,0.12))' }}>
+              <span className="text-2xl">🗣</span>
+            </div>
+            <h3 className={`font-display font-bold text-xl mb-4 ${head}`}>Languages Spoken</h3>
+            <div className="flex flex-wrap gap-2">
+              {['Hindi','Marathi','English'].map(l => <span key={l} className="skill-badge">{l}</span>)}
+            </div>
           </div>
         </div>
+
       </div>
     </section>
   )

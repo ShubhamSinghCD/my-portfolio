@@ -11,7 +11,7 @@ A production-grade portfolio built with **React + Vite + Tailwind CSS + Three.js
 - 📱 Fully responsive + mobile menu
 - 💚 WhatsApp floating button (bottom-right corner)
 - 🔄 Infinite marquee of project names
-- 📧 Contact form with success feedback
+- 🖥 Terminal-style contact card (email / WhatsApp / résumé download, copy-email button)
 
 ## 🚀 Quick Start
 
@@ -42,7 +42,8 @@ src/
 │   ├── Projects.jsx        # 4-col × 2-row project grid
 │   ├── Marquee.jsx         # Infinite scrolling text
 │   ├── Experience.jsx      # Timeline work history
-│   ├── Contact.jsx         # Contact form
+│   ├── Education.jsx       # Education cards
+│   ├── Contact.jsx         # Terminal-style contact section (no form)
 │   ├── Footer.jsx
 │   └── WhatsAppButton.jsx  # Fixed WhatsApp CTA
 ├── hooks/
@@ -59,3 +60,15 @@ src/
 - **GSAP 3** + ScrollTrigger
 - **AOS 2.3** — scroll animations
 - **Syne** + **DM Sans** — typography
+
+## 🌐 Deploying to coredev.in (GitHub Pages)
+
+`public/CNAME` keeps the custom domain across deployments, and
+`.github/workflows/deploy.yml` builds the site and publishes `dist/`.
+
+1. Push to `main`.
+2. GitHub → **Settings → Pages → Source: GitHub Actions**.
+3. DNS: 4 × A records (`185.199.108-111.153`) for `@` and a CNAME `www` → `<username>.github.io`.
+
+> The old `server/` folder (Express + MySQL contact API) is no longer used by the site and can be deleted.
+> Never commit `server/.env` — it is now in `.gitignore`.

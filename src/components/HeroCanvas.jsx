@@ -8,7 +8,14 @@ export default function HeroCanvas({ isDark }) {
     const canvas = canvasRef.current
     if (!canvas) return
 
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true })
+    let renderer
+    try {
+      renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true })
+    } catch (err) {
+      // WebGL unavailable (old device / blocked) — skip the 3D background instead of crashing the page
+      console.warn('WebGL not available, hero canvas disabled.', err)
+      return
+    }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     renderer.setSize(canvas.offsetWidth, canvas.offsetHeight)
 
@@ -68,6 +75,7 @@ export default function HeroCanvas({ isDark }) {
 
     const onResize = () => {
       const w = canvas.offsetWidth, h = canvas.offsetHeight
+      if (!w || !h) return
       renderer.setSize(w, h)
       camera.aspect = w / h
       camera.updateProjectionMatrix()
